@@ -55,9 +55,6 @@ class IconStepper extends StatelessWidget {
   /// The radius of a step.
   final double stepRadius;
 
-  //if Complete function call
-  final Function? stepsCompletedStatusMap;
-
   /// The animation effect to show when a step is reached.
   final Curve stepReachedAnimationEffect;
 
@@ -83,16 +80,13 @@ class IconStepper extends StatelessWidget {
   final bool? stepperAnimateInMiddle;
 
   // completed Map
-  final Map<String,int>? completedTasks;
-
-
-
+  final Set<int>? completedTasks;
 
   /// Creates an IconStepper widget.
-  IconStepper({
+  const IconStepper({
+    super.key,
     this.completedTasks,
     this.stepperAnimateInMiddle,
-    this.stepsCompletedStatusMap,
     this.stepCompletedColor,
     this.icons,
     this.enableNextPreviousButtons = true,
@@ -123,7 +117,6 @@ class IconStepper extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseStepper(
       completedSteps: completedTasks,
-      children: _iconsWithSizeOverridden(),
       stepperAnimateInMiddle: stepperAnimateInMiddle,
       stepCompetedColor: stepCompletedColor,
       nextPreviousButtonsDisabled: enableNextPreviousButtons,
@@ -148,6 +141,7 @@ class IconStepper extends StatelessWidget {
       scrollingDisabled: scrollingDisabled,
       activeStep: activeStep,
       alignment: alignment,
+      children: _iconsWithSizeOverridden(),
     );
   }
 

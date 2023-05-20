@@ -53,9 +53,8 @@ class BaseStepper extends StatefulWidget {
     );
   }
 
-
   // completed Map
-  final Map<String,int>? completedSteps;
+  final Set<int>? completedSteps;
   //Animate Selected Stepper in middle
   final bool? stepperAnimateInMiddle;
 
@@ -166,9 +165,10 @@ class BaseStepperState extends State<BaseStepper> {
   void _afterLayout(_) {
     // ! Provide detailed explanation.
     for (int i = 0; i < widget.children!.length; i++) {
-      print(widget.stepperAnimateInMiddle );
       _scrollController!.animateTo(
-        widget.stepperAnimateInMiddle == true? (i * ((widget.stepRadius * 2) + widget.lineLength)) - 98 : i * ((widget.stepRadius * 2) + widget.lineLength),
+        widget.stepperAnimateInMiddle == true
+            ? (i * ((widget.stepRadius * 2) + widget.lineLength)) - 98
+            : i * ((widget.stepRadius * 2) + widget.lineLength),
         duration: widget.stepReachedAnimationDuration,
         curve: widget.stepReachedAnimationEffect,
       );
@@ -252,10 +252,15 @@ class BaseStepperState extends State<BaseStepper> {
     );
   }
 
+  bool _isStepCompleted(int index) {
+    return widget.completedSteps?.contains(index) ?? true;
+  }
+
   /// A customized IconStep.
   Widget _customizedIndicator(int index) {
     return BaseIndicator(
-      isStepCompleted: widget.completedSteps![index.toString()] == 0 ? false : true,
+      canStep: _isStepCompleted(index > 0 ? index - 1 : index),
+      isStepCompleted: _isStepCompleted(index),
       isSelected: _selectedIndex == index,
       onPressed: widget.stepTappingDisabled
           ? () {

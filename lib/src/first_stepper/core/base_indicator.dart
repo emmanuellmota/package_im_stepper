@@ -36,7 +36,10 @@ class BaseIndicator extends StatelessWidget {
 
   final bool? isStepCompleted;
 
-  BaseIndicator({
+  final bool canStep;
+
+  const BaseIndicator({
+    super.key,
     this.isStepCompleted,
     this.completedColor,
     this.isSelected = false,
@@ -49,7 +52,23 @@ class BaseIndicator extends StatelessWidget {
     this.padding = 5.0,
     this.margin = 1.0,
     this.activeBorderWidth = 0.5,
+    this.canStep = true,
   });
+
+  bool get isCompleted {
+    return ((isStepCompleted ?? false));
+  }
+
+  Color getIndicatorColor() {
+    if (isSelected) {
+      return activeColor ?? Colors.green;
+    }
+    if (isStepCompleted == true || canStep) {
+      return completedColor ?? Colors.green;
+    } else {
+      return color ?? Colors.grey;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,21 +83,33 @@ class BaseIndicator extends StatelessWidget {
             : null,
         shape: BoxShape.circle,
       ),
-      child: InkWell(
-        onTap: onPressed as void Function()?,
-        child: Container(
-          height: radius * 2,
-          width: radius * 2,
-          padding: EdgeInsets.all(padding),
-          decoration: BoxDecoration(
-            color:
-            isSelected ? activeColor ?? Colors.green :(isStepCompleted == true) ? completedColor ?? Colors.green : color ?? Colors.grey,
-            shape: BoxShape.circle,
+      child: Stack(
+        children: [
+          InkWell(
+            onTap: onPressed as void Function()?,
+            child: Container(
+              height: radius * 2,
+              width: radius * 2,
+              padding: EdgeInsets.all(padding),
+              decoration: BoxDecoration(
+                color: getIndicatorColor(),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: child,
+              ),
+            ),
           ),
-          child: Center(
-            child: child,
-          ),
-        ),
+          if (isCompleted)
+            const Positioned(
+                bottom: 0,
+                right: 0,
+                child: Icon(
+                  Icons.check_circle,
+                  color: Colors.white,
+                  size: 17,
+                ))
+        ],
       ),
     );
   }
