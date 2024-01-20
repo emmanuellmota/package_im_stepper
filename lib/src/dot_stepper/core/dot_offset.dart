@@ -5,10 +5,10 @@ class DotOffset {
   DotOffset(this._center, this._dotRadius);
 
   /// The center of the dot.
-  Offset _center;
+  final Offset _center;
 
   /// The radius of the dot.
-  double _dotRadius;
+  final double _dotRadius;
 
   /// Returns the left dx offset of the dot.
   double get left => _center.dx - _dotRadius;

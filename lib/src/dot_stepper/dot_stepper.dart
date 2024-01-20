@@ -67,7 +67,7 @@ class DotStepper extends StatefulWidget {
   /// __Note:__ You must update the `activeDot` in your `StatefulWidget` to `tappedDotIndex` provided by this callback inside a `setState()` method, for tapping to function flawlessly.
   final OnDotTapped? onDotTapped;
 
-  DotStepper({
+  DotStepper({super.key, 
     required this.activeStep,
     this.dotCount = 2,
     this.dotRadius = 24,
@@ -129,7 +129,7 @@ class _DotStepperState extends State<DotStepper>
   @override
   void initState() {
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
       vsync: this,
     )..addListener(() {
         setState(() {});

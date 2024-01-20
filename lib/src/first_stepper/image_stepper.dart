@@ -73,7 +73,7 @@ class ImageStepper extends StatelessWidget {
   final AlignmentGeometry alignment;
 
   /// Creates an ImageStepper widget.
-  ImageStepper({
+  const ImageStepper({super.key, 
     this.images,
     this.enableNextPreviousButtons = true,
     this.enableStepTapping = true,
@@ -102,7 +102,6 @@ class ImageStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseStepper(
-      children: _imagesWrappedInCircleAvatar(),
       nextPreviousButtonsDisabled: enableNextPreviousButtons,
       stepTappingDisabled: enableStepTapping,
       previousButtonIcon: previousButtonIcon,
@@ -125,6 +124,7 @@ class ImageStepper extends StatelessWidget {
       scrollingDisabled: scrollingDisabled,
       activeStep: activeStep,
       alignment: alignment,
+      children: _imagesWrappedInCircleAvatar(),
     );
   }
 

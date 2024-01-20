@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'stepper.dart';
 
 void main() {
-  runApp(IconStepperDemo());
+  runApp(const IconStepperDemo());
 }
 
 class IconStepperDemo extends StatefulWidget {
