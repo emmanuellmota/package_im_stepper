@@ -82,6 +82,8 @@ class IconStepper extends StatelessWidget {
   // completed Map
   final Set<int>? completedTasks;
 
+  final IndicatorBuilder? indicatorBuilder;
+
   /// Creates an IconStepper widget.
   const IconStepper({
     super.key,
@@ -111,6 +113,7 @@ class IconStepper extends StatelessWidget {
     this.scrollingDisabled = false,
     this.activeStep = 0,
     this.alignment = Alignment.center,
+    this.indicatorBuilder,
   });
 
   @override
@@ -141,6 +144,7 @@ class IconStepper extends StatelessWidget {
       scrollingDisabled: scrollingDisabled,
       activeStep: activeStep,
       alignment: alignment,
+      indicatorBuilder: indicatorBuilder,
       children: _iconsWithSizeOverridden(),
     );
   }

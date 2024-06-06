@@ -87,6 +87,7 @@ class BaseIndicator extends StatelessWidget {
         children: [
           InkWell(
             onTap: onPressed as void Function()?,
+            borderRadius: BorderRadius.circular(radius),
             child: Container(
               height: radius * 2,
               width: radius * 2,

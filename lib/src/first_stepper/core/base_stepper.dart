@@ -3,6 +3,15 @@ import 'package:flutter/material.dart';
 import '../../core/dotted_line.dart';
 import 'base_indicator.dart';
 
+typedef IndicatorBuilder = Widget Function(
+  BuildContext context,
+  int index,
+  bool isCompleted,
+  bool isSelected,
+  bool canStep,
+  Null Function()? onPressed,
+);
+
 /// Callback is fired when a step is reached.
 typedef OnStepReached = void Function(int index);
 
@@ -36,6 +45,7 @@ class BaseStepper extends StatefulWidget {
     this.scrollingDisabled = false,
     this.activeStep = 0,
     this.alignment,
+    this.indicatorBuilder,
   }) {
     assert(
       lineDotRadius <= 10 && lineDotRadius > 0,
@@ -129,6 +139,8 @@ class BaseStepper extends StatefulWidget {
 
   /// Specifies the alignment of the stepper.
   final AlignmentGeometry? alignment;
+
+  final IndicatorBuilder? indicatorBuilder;
 
   @override
   BaseStepperState createState() => BaseStepperState();
@@ -258,32 +270,44 @@ class BaseStepperState extends State<BaseStepper> {
 
   /// A customized IconStep.
   Widget _customizedIndicator(int index) {
-    return BaseIndicator(
-      canStep: _isStepCompleted(index > 0 ? index - 1 : index),
-      isStepCompleted: _isStepCompleted(index),
-      isSelected: _selectedIndex == index,
-      onPressed: widget.stepTappingDisabled
-          ? () {
-              if (widget.steppingEnabled) {
-                setState(() {
-                  _selectedIndex = index;
+    final canStep = _isStepCompleted(index > 0 ? index - 1 : index);
+    final onPressed = widget.stepTappingDisabled
+        ? () {
+            if (widget.steppingEnabled) {
+              setState(() {
+                _selectedIndex = index;
 
-                  if (widget.onStepReached != null) {
-                    widget.onStepReached!(_selectedIndex);
-                  }
-                });
-              }
+                if (widget.onStepReached != null) {
+                  widget.onStepReached!(_selectedIndex);
+                }
+              });
             }
-          : null,
-      color: widget.stepColor,
-      activeColor: widget.activeStepColor,
-      activeBorderColor: widget.activeStepBorderColor,
-      radius: widget.stepRadius,
-      padding: widget.padding,
-      margin: widget.margin,
-      activeBorderWidth: widget.activeStepBorderWidth,
-      child: widget.children![index],
-    );
+          }
+        : null;
+
+    return widget.indicatorBuilder != null
+        ? widget.indicatorBuilder!(
+            context,
+            index,
+            _isStepCompleted(index),
+            _selectedIndex == index,
+            canStep,
+            onPressed,
+          )
+        : BaseIndicator(
+            canStep: canStep,
+            isStepCompleted: _isStepCompleted(index),
+            isSelected: _selectedIndex == index,
+            onPressed: onPressed,
+            color: widget.stepColor,
+            activeColor: widget.activeStepColor,
+            activeBorderColor: widget.activeStepBorderColor,
+            radius: widget.stepRadius,
+            padding: widget.padding,
+            margin: widget.margin,
+            activeBorderWidth: widget.activeStepBorderWidth,
+            child: widget.children![index],
+          );
   }
 
   /// A customized DottedLine.
